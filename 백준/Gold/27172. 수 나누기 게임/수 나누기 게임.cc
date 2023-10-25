@@ -11,7 +11,7 @@ int max_num;
 
 void func() {
 	for (int i = 0; i < v.size(); i++) {
-		for (int j = v[i] * 2; j <= 1000000; j += v[i]) {
+		for (int j = v[i] * 2; j <= max_num; j += v[i]) {
 			if (check[j]) {
 				result[v[i]]++;
 				result[j]--;
@@ -30,7 +30,7 @@ int main() {
 		cin >> x;
 		v.push_back(x);
 		check[x] = true;
-		//max_num = max(max_num, x);
+		max_num = max(max_num, x);
 	}
 	func();
 	for (int i = 0; i < v.size(); i++) {
