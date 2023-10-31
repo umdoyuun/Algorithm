@@ -30,10 +30,12 @@ int main() {
 	int range = v[n - 1] - v[0];
 	int max_cnt = 0;
 	int result = 0;
-	for (int i = 0; i < 8001; i++) {
-		if (cnt[i] == Max) {
+	for (int i = 0; i < v.size(); i++) {
+		int x = v[i];
+		if (cnt[x + 4000] == Max) {
+			if (result == x) continue;
 			max_cnt++;
-			result = i - 4000;
+			result = x;
 			if (max_cnt == 2) {
 				break;
 			}
