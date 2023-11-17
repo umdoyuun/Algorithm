@@ -1,63 +1,49 @@
-#include<iostream>
-#include<algorithm>
-#include<vector>
-#include<tuple>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int V, E, A, B, C;
+struct node {
+	int x, y, cost;
+};
+int v, e, result;
+vector<node> V;
 int parent[10001];
-long long ans;
-bool check;
-vector<tuple<int, int, int>> graph;
 
-int find_parent(int x)
-{
-	if (parent[x] == x)
-		return x;
-	else
-		return parent[x] = find_parent(parent[x]);
+bool compare(node x, node y) {
+	return x.cost < y.cost;
 }
 
-void union_node(int u, int v)
-{
-	check = false;
-
-	u = find_parent(u);
-	v = find_parent(v);
-
-	if (u == v) 
-		return;
-	else
-	{
-		parent[u] = v;
-		check = true;
-	}
+int getParent(int x) {
+	if (x == parent[x]) return x;
+	else return parent[x] = getParent(parent[x]);
 }
 
-int main()
-{
+bool unionParent(int x, int y) {
+	x = getParent(x);
+	y = getParent(y);
+	if (x == y) return false;
+	parent[x] = y;
+	return true;
+}
+
+int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-
-	cin >> V >> E;
-
-	for (int i = 1; i <= V; i++)
+	cout.tie(0);
+	cin >> v >> e;
+	for (int i = 1; i <= v; i++)
 		parent[i] = i;
-
-	for (int i = 0; i < E; i++)
-	{
-		cin >> A >> B >> C;
-		graph.push_back(make_tuple(C, A, B));
+	for (int i = 0; i < e; i++) {
+		int x, y, cost;
+		cin >> x >> y >> cost;
+		V.push_back({ x, y, cost });
 	}
-	
-	sort(graph.begin(), graph.end());
-
-	for (int i = 0; i < E; i++)
-	{
-		union_node(get<1>(graph[i]), get<2>(graph[i]));
-
-		if (check) ans += get<0>(graph[i]); 
+	sort(V.begin(), V.end(), compare);
+	for (int i = 0; i < V.size(); i++) {
+		if (unionParent(V[i].x, V[i].y))
+			result += V[i].cost;
 	}
-
-	cout << ans << '\n';
+	cout << result;
+	return 0;
 }
