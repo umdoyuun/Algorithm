@@ -5,112 +5,98 @@ using namespace std;
 int n, m;
 
 struct node {
-	int x;
-	node* next;
-	node* prev;
+	int next, prev;
 };
 
 node pool[1000001];
 
-node* head, * tail;
-
-node* get_node(int data) {
-	pool[data].x = data;
-	pool[data].next = nullptr;
-	pool[data].prev = nullptr;
-	return &pool[data];
-}
-
+int head = -1, tail = -1;
 
 void insert_back(int data) {
-	node* n_node = get_node(data);
-	if (head == nullptr) {
-		head = n_node;
+	if (head == -1) {
+		head = data;
 		tail = head;
 	}
 	else {
-		tail->next = n_node;
-		n_node->prev = tail;
-		tail = n_node;
+		pool[tail].next = data;
+		pool[data].prev = tail;
+		tail = data;
 	}
 	return;
 }
 
 void insert(int s, int type, int data) {
-	node* n_node = get_node(data);
 	//type 0: 뒤로, type 1: 앞으로
-	node* list = &pool[s];
 	switch (type) {
 	case 0:
-		if (list == head) {
-			n_node->next = head;
-			head->prev = n_node;
-			head = n_node;
-			cout << tail->x << '\n';
+		if (s == head) {
+			pool[data].next = head;
+			pool[head].prev = data;
+			head = data;
+			cout << tail << '\n';
 		}
 		else {
-			cout << list->prev->x << '\n';
-			n_node->next = list;
-			n_node->prev = list->prev;
-			list->prev->next = n_node;
-			list->prev = n_node;
+			cout << pool[s].prev << '\n';
+			pool[data].next = s;
+			pool[data].prev = pool[s].prev;
+			pool[pool[s].prev].next = data;
+			pool[s].prev = data;
 		}
 		break;
 	case 1:
-		if (list == tail) {
-			cout << head->x << '\n';
-			n_node->prev = tail;
-			tail->next = n_node;
-			tail = n_node;
+		if (s == tail) {
+			cout << head << '\n';
+			pool[data].prev = tail;
+			pool[tail].next = data;
+			tail = data;
 		}
 		else {
-			cout << list->next->x << '\n';
-			n_node->next = list->next;
-			n_node->prev = list;
-			list->next->prev = n_node;
-			list->next = n_node;
+			cout << pool[s].next << '\n';
+			pool[data].next = pool[s].next;
+			pool[data].prev = s;
+			pool[pool[s].next].prev = data;
+			pool[s].next = data;
 		}
 	}
 	return;
 }
 
 void Delete(int s, int type) {
-	node* list = &pool[s];
 	//type 0 : 뒤로 1: 앞으로
 	switch (type) {
 	case 0:
-		if (head == list) {
-			cout << tail->x << '\n';
-			tail = tail->prev;
-			tail->next = nullptr;
+		if (head == s) {
+			cout << tail << '\n';
+			tail = pool[tail].prev;
+			pool[tail].next = -1;
 		}
 		else {
-			cout << list->prev->x << '\n';
-			if (list->prev == head) {
-				head = head->next;
-				head->prev = nullptr;
+			cout << pool[s].prev << '\n';
+			if (pool[s].prev == head) {
+				head = pool[head].next;
+				pool[head].prev = -1;
 			}
 			else {
-				list->prev = list->prev->prev;
-				list->prev->next = list;
+				pool[s].prev = pool[pool[s].prev].prev;
+				pool[pool[s].prev].next = s;
 			}
 		}
 		break;
 	case 1:
-		if (tail == list) {
-			cout << head->x << '\n';
-			head = head->next;
-			head->prev = nullptr;
+		if (tail == s) {
+			cout << head << '\n';
+			head = pool[head].next;
+			pool[head].prev = -1;
 		}
 		else {
-			cout << list->next->x << '\n';
-			if (list->next == tail) {
-				tail = tail->prev;
-				tail->next = nullptr;
+			cout << pool[s].next << '\n';
+			if (pool[s].next == tail) {
+				tail = pool[tail].prev;
+				pool[tail].next = -1;
 			}
 			else {
-				list->next = list->next->next;
-				list->next->prev = list;
+				pool[s].next = pool[pool[s].next].next;
+				pool[pool[s].next].prev = s;
 			}
 		}
 	}
