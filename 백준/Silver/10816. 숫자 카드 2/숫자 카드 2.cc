@@ -2,7 +2,7 @@
 #include <algorithm>
 using namespace std;
 
-int arr[500001];
+int arr[20000001];
 int n, m;
 
 int main() {
@@ -11,15 +11,15 @@ int main() {
 	cout.tie(0);
 	cin >> n;
 	for (int i = 0; i < n; i++) {
-		cin >> arr[i];
+		int x;
+		cin >> x;
+		arr[x + 10000000]++;
 	}
-	sort(arr, arr + n);
 	cin >> m;
 	for (int i = 0; i < m; i++) {
 		int x;
 		cin >> x;
-		int cnt = upper_bound(arr, arr + n, x) - lower_bound(arr, arr + n, x);
-		cout << cnt << ' ';
+		cout << arr[x + 10000000] << ' ';
 	}
 	return 0;
 }
