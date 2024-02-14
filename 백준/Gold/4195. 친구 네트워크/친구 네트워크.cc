@@ -3,14 +3,13 @@
 #include <unordered_map>
 using namespace std;
 
-int result, n, cnt;
+int n, cnt;
 unordered_map<string, int> um;
 int par[200001];
 int f_cnt[200001];
 
 void init() {
 	um.clear();
-	result = 1;
 	cnt = 0;
 }
 
@@ -41,9 +40,6 @@ int main() {
 		for (int i = 0; i < n; i++) {
 			string str1, str2;
 			cin >> str1 >> str2;
-			/*if (um[str1] == 0) {
-				um[str1] = ++cnt;
-			}*/
 			if (um.find(str1) == um.end()) {
 				um.insert({ str1, ++cnt });
 				par[cnt] = cnt;
