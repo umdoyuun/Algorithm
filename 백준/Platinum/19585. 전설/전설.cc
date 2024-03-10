@@ -13,9 +13,8 @@ struct node {
 	map<char, node*> Map;
 };
 
-unordered_set<string> s;
+unordered_set<string> s_nick;
 node* color_root;
-node* nick_root;
 
 node* new_node() {
 	node* nd = new node();
@@ -34,38 +33,12 @@ void color_trie(string str) {
 	cur->end = true;
 }
 
-void nick_trie(string str) {
-	node* cur = nick_root;
-	for (int i = 0; i < str.size(); i++) {
-		if (cur->Map.find(str[i]) == cur->Map.end()) {
-			cur->Map[str[i]] = new_node();
-		}
-		cur = cur->Map[str[i]];
-	}
-	cur->end = true;
-}
-
-void check_nick(string str, int idx) {
-	node* cur = nick_root;
-	for (int i = idx; i < str.size(); i++) {
-		if (cur->Map.find(str[i]) == cur->Map.end()) {
-			return;
-		}
-		else {
-			cur = cur->Map[str[i]];
-		}
-	}
-	if (cur->end) res = true;
-}
-
-
 void check(string str) {
 	node* cur = color_root;
 	for (int i = 0; i < str.size(); i++) {
 		if (cur->end) {
 			if (!res)
-				//check_nick(str, i);
-				if (s.count(str.substr(i))) {
+				if (s_nick.count(str.substr(i))) {
 					res = true;
 				}
 		}
@@ -84,7 +57,6 @@ int main() {
 	cout.tie(0);
 	cin >> n >> m;
 	color_root = new_node();
-	nick_root = new_node();
 	for (int i = 0; i < n; i++) {
 		string str;
 		cin >> str;
@@ -93,8 +65,7 @@ int main() {
 	for (int i = 0; i < m; i++) {
 		string str;
 		cin >> str;
-		s.insert(str);
-		//nick_trie(str);
+		s_nick.insert(str);
 	}
 	cin >> q;
 	for (int i = 0; i < q; i++) {
