@@ -1,52 +1,58 @@
 #include <iostream>
-#include <string>
 #include <map>
 #include <unordered_set>
-#include <algorithm>
+#include <string>
 using namespace std;
 
-int n, m, q;
-bool res;
+int c, n, m;
 
-struct node {
-	bool end;
-	map<char, node*> Map;
+struct Trie {
+	bool isEnd, lastWord;
+	map<char, Trie*> child;
 };
 
-unordered_set<string> s_nick;
-node* color_root;
+Trie pool[5000000];
+int p_cnt;
+Trie* root;
+unordered_set<string> us;
 
-node* new_node() {
-	node* nd = new node();
-	nd->end = false;
-	return nd;
+Trie* new_trie() {
+	pool[p_cnt].isEnd = false;
+	pool[p_cnt].lastWord = true;
+	return &pool[p_cnt++];
 }
 
-void color_trie(string str) {
-	node* cur = color_root;
+void make_trie(string str) {
+	Trie* cur = root;
 	for (int i = 0; i < str.size(); i++) {
-		if (cur->Map.find(str[i]) == cur->Map.end()) {
-			cur->Map[str[i]] = new_node();
-		}
-		cur = cur->Map[str[i]];
-	}
-	cur->end = true;
-}
-
-void check(string str) {
-	node* cur = color_root;
-	for (int i = 0; i < str.size(); i++) {
-		if (cur->end) {
-			if (!res)
-				if (s_nick.count(str.substr(i))) {
-					res = true;
-				}
-		}
-		if (cur->Map.find(str[i]) == cur->Map.end()) {
-			return;
+		char c = str[i];
+		if (cur->child.find(c) == cur->child.end()) {
+			cur->child[c] = new_trie();
+			cur->lastWord = false;
+			cur = cur->child[c];
 		}
 		else {
-			cur = cur->Map[str[i]];
+			cur = cur->child[c];
+		}
+	}
+	cur->isEnd = true;
+}
+
+bool find(string str) {
+	Trie* cur = root;
+	for (int i = 0; i < str.size(); i++) {
+		char c = str[i];
+		if (cur->child.find(c) == cur->child.end()) {
+			return false;
+		}
+		else {
+			cur = cur->child[c];
+			if (cur->isEnd) {
+				string tmp = str.substr(i + 1);
+				if (us.count(tmp)) {
+					return true;
+				}
+			}
 		}
 	}
 }
@@ -55,25 +61,23 @@ int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> n >> m;
-	color_root = new_node();
+	root = new_trie();
+	cin >> c >> n;
+	for (int i = 0; i < c; i++) {
+		string str;
+		cin >> str;
+		make_trie(str);
+	}
 	for (int i = 0; i < n; i++) {
 		string str;
 		cin >> str;
-		color_trie(str);
+		us.insert(str);
 	}
+	cin >> m;
 	for (int i = 0; i < m; i++) {
 		string str;
 		cin >> str;
-		s_nick.insert(str);
-	}
-	cin >> q;
-	for (int i = 0; i < q; i++) {
-		string str;
-		cin >> str;
-		res = false;
-		check(str);
-		if (res) {
+		if (find(str)) {
 			cout << "Yes\n";
 		}
 		else {
