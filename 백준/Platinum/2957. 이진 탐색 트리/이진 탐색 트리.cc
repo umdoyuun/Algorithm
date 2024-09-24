@@ -5,7 +5,7 @@ using namespace std;
 
 int n, root;
 long long res;
-set<int> s;
+//set<int> s;
 map<int, pair<int, int>> m;
 int dat[300001];
 
@@ -17,37 +17,37 @@ int main() {
 	cin >> n;
 	cin >> root;
 	cout << res << '\n';
-	s.insert(root);
+	m[root] = { 0, 0 };
 	for (int i = 0; i < n - 1; i++) {
 		int x;
 		cin >> x;
 		
-		auto iter = s.lower_bound(x);
-		if (iter == s.end()) {
+		auto iter = m.lower_bound(x);
+		if (iter == m.end()) {
 			iter--;
-			m[*iter].second = x;
-			dat[x] = dat[*iter] + 1;
+			m[iter->first].second = x;
+			dat[x] = dat[iter->first] + 1;
 			res += dat[x];
 		}
-		else if (iter == s.begin()) {
-			m[*iter].first = x;
-			dat[x] = dat[*iter] + 1;
+		else if (iter == m.begin()) {
+			m[iter->first].first = x;
+			dat[x] = dat[iter->first] + 1;
 			res += dat[x];
 		}
 		else {
-			if (m[*iter].first == 0) {
-				m[*iter].first = x;
-				dat[x] = dat[*iter] + 1;
+			if (m[iter->first].first == 0) {
+				m[iter->first].first = x;
+				dat[x] = dat[iter->first] + 1;
 				res += dat[x];
 			}
 			else {
 				iter--;
-				m[*iter].second = x;
-				dat[x] = dat[*iter] + 1;
+				m[iter->first].second = x;
+				dat[x] = dat[iter->first] + 1;
 				res += dat[x];
 			}
 		}
-		s.insert(x);
+		m[x] = { 0, 0 };
 		cout << res << '\n';
 	}
 	return 0;
