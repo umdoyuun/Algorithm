@@ -11,8 +11,7 @@ int main() {
 	string str;
 	deque<char> dq;
 	cin >> n >> m >> str;
-	dq.push_back(str[0]);
-	for (int i = 1; i < n; i++) {
+	for (int i = 0; i < n; i++) {
 		while (!dq.empty()) {
 			if (dq.back() < str[i] && cnt < m) {
 				dq.pop_back();
