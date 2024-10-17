@@ -6,7 +6,7 @@ int n, m, cnt, flag;
 vector<int> v[100001];
 pair<int, int> dat[100001];
 struct node {
-	long long sum, sum2, lazy, lazy2;
+	long long sum, sum2, lazy;
 };
 node seg[100001 * 4];
 
@@ -28,14 +28,6 @@ void lazy_update(int x, int s, int e) {
 		}
 		seg[x].lazy = 0;
 	}
-	if (seg[x].lazy2) {
-		seg[x].sum2 += (e - s + 1) * seg[x].lazy2;
-		if (s != e) {
-			seg[x * 2].lazy2 += seg[x].lazy2;
-			seg[x * 2 + 1].lazy2 += seg[x].lazy2;
-		}
-		seg[x].lazy2 = 0;
-	}
 }
 
 void update(int x, int s, int e, int l, int r, long long v) {
@@ -54,11 +46,9 @@ void update(int x, int s, int e, int l, int r, long long v) {
 }
 
 void update2(int x, int s, int e, int idx, long long  v) {
-	lazy_update(x, s, e);
 	if (idx < s || e < idx) return;
 	if (s == e) {
-		seg[x].lazy2 += v;
-		lazy_update(x, s, e);
+		seg[x].sum2 += v;
 		return;
 	}
 	int mid = s + (e - s) / 2;
@@ -79,7 +69,6 @@ long long get_sum(int x, int s, int e, int idx) {
 }
 
 long long get_sum2(int x, int s, int e, int l, int r) {
-	lazy_update(x, s, e);
 	if (r < s || e < l) return 0;
 	if (l <= s && e <= r) {
 		return seg[x].sum2;
@@ -110,14 +99,8 @@ int main() {
 			x--;
 			if (flag) update2(1, 0, n - 1, dat[x].first, y);
 			else update(1, 0, n - 1, dat[x].first, dat[x].second, y);
-
-			/*for (int i = 0; i < 5; i++) {
-				long long res = get_sum(1, 0, n - 1, dat[i].first) + get_sum2(1, 0, n - 1, dat[i].first, dat[i].second);
-				cout << res << ' ';
-			}
-			cout << '\n';*/
 		}
-		else if(cmd == 2){
+		else if (cmd == 2) {
 			int x;
 			cin >> x;
 			x--;
