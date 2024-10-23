@@ -2,13 +2,20 @@
 #include <algorithm>
 using namespace std;
 
-int n;
+int n, res;
 struct node {
-	node* child[2] = { nullptr, };
+	node* child[2];
 };
 
 node* root;
+node pool[5000000];
+int cnt;
 
+node* new_node() {
+	pool[cnt].child[0] = nullptr;
+	pool[cnt].child[1] = nullptr;
+	return &pool[cnt++];
+}
 
 int check(int x) {
 	node* cur = root;
@@ -21,6 +28,7 @@ int check(int x) {
 			cur = cur->child[!f];
 		}
 		else {
+            if (res >= ret + (1 << i)) return 0;
 			cur = cur->child[f];
 		}
 	}
@@ -34,7 +42,7 @@ void insert(int x) {
 		if (y) y = 1;
 		
 		if (cur->child[y] == nullptr) {
-			cur->child[y] = new node;
+			cur->child[y] = new_node();
 		}
 		cur = cur->child[y];
 	}
@@ -45,8 +53,8 @@ int main() {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> n;
-	root = new node;
-	int res = 0;
+	root = new_node();
+
 	for (int i = 0; i < n; i++) {
 		int x;
 		cin >> x;
