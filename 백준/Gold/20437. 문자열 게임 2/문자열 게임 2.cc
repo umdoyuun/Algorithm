@@ -35,7 +35,7 @@ int main() {
                 l_res = max(l_res, i - idx[c][cnt[c] - k] + 1);
             }
         }
-        if (s_res == 10001) {  // s_res가 갱신되지 않았다면 -1 출력
+        if (s_res == 10001) {
             cout << "-1\n";
         }
         else {
