@@ -4,15 +4,23 @@
 using namespace std;
 
 
-int n, m, l, s, e;
+int n, m, l;
 vector<int> inDegree[200001];
 int input[200001];
 vector<pair<int, int>> v[200001];
 int cnt[200001];
 bool visit[200001];
-int q[5000000];
+
 
 void topology_sort() {
+	int q[200001] = { 0, };
+	int s = 0, e = 0;
+	for (int i = 0; i < l; i++) {
+		int x;
+		cin >> x;
+		q[e++] = x;
+		visit[x] = true;
+	}
 	vector<int> res;
 	while (s < e) {
 		int x = q[s++];
@@ -55,12 +63,7 @@ int main() {
 		cnt[x]++;
 	}
 	cin >> l;
-	for (int i = 0; i < l; i++) {
-		int x;
-		cin >> x;
-		q[e++] = x;
-		visit[x] = true;
-	}
+	
 	topology_sort();
 	return 0;
 }
