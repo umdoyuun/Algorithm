@@ -1,29 +1,27 @@
 #include <iostream>
-#include <queue>
 #include <algorithm>
 #include <vector>
 using namespace std;
 
 
-int n, m, l;
+int n, m, l, s, e;
 vector<int> inDegree[200001];
 int input[200001];
 vector<pair<int, int>> v[200001];
 int cnt[200001];
 bool visit[200001];
-queue<int> q;
+int q[5000000];
 
 void topology_sort() {
 	vector<int> res;
-	while (!q.empty()) {
-		int x = q.front();
-		q.pop();
+	while (s < e) {
+		int x = q[s++];
 		res.push_back(x);
 		for (int i = 0; i < v[x].size(); i++) {
 			int y = v[x][i].first;
 			int idx = v[x][i].second;
 			if (--inDegree[y][idx] == 0 && !visit[y]) {
-				q.push(y);
+				q[e++] = y;
 				visit[y] = true;
 			}
 		}
@@ -60,7 +58,7 @@ int main() {
 	for (int i = 0; i < l; i++) {
 		int x;
 		cin >> x;
-		q.push(x);
+		q[e++] = x;
 		visit[x] = true;
 	}
 	topology_sort();
