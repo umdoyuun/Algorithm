@@ -15,8 +15,6 @@ struct node {
 	}
 };
 
-int g[100][100];
-
 int bfs(int sx, int sy) {
 	priority_queue<node> pq;
 	pq.push({ sx, sy, -1, 4});
@@ -30,7 +28,6 @@ int bfs(int sx, int sy) {
 		int cnt = pq.top().cnt;
 		int dir = pq.top().dir;
 		pq.pop();
-		g[x][y] = cnt;
 		if (map[x][y] == 'C' && cnt >= 0) {
 			return cnt;
 		}
@@ -45,16 +42,6 @@ int bfs(int sx, int sy) {
 			visit[nx][ny][i] = ncnt;
 			pq.push({ nx, ny, ncnt, i });
 		}
-	}
-}
-
-void print() {
-	cout << '\n';
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			cout << g[i][j] << ' ';
-		}
-		cout << '\n';
 	}
 }
 
@@ -76,6 +63,5 @@ int main() {
 		}
 	}
 	cout << bfs(sx, sy);
-	//print();
 	return 0;
 }
