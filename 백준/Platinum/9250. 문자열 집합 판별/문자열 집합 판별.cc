@@ -5,22 +5,23 @@
 #include <string>
 using namespace std;
 
-struct TrieNode {
-    unordered_map<char, TrieNode*> child;
-    TrieNode* fail = nullptr;
+struct Trie {
+    unordered_map<char, Trie*> child;
+    Trie* fail = nullptr;
     bool isEnd = false;
 };
 
-TrieNode pool[100000];
+Trie pool[100000];
 int pool_idx = 0;
+Trie* root;
 
-TrieNode* new_node() {
+Trie* new_node() {
     return &pool[pool_idx++];
 }
 
-void insert(TrieNode* root, const string& word) {
-    TrieNode* cur = root;
-    for (char c : word) {
+void insert(string str) {
+    Trie* cur = root;
+    for (char c : str) {
         if (cur->child.find(c) == cur->child.end()) {
             cur->child[c] = new_node();
         }
@@ -29,8 +30,8 @@ void insert(TrieNode* root, const string& word) {
     cur->isEnd = true;
 }
 
-void build_failure(TrieNode* root) {
-    queue<TrieNode*> q;
+void build_failure() {
+    queue<Trie*> q;
     root->fail = root;
 
     for (auto& [c, node] : root->child) {
@@ -39,17 +40,18 @@ void build_failure(TrieNode* root) {
     }
 
     while (!q.empty()) {
-        TrieNode* cur = q.front();
+        Trie* cur = q.front();
         q.pop();
 
         for (auto& [c, next] : cur->child) {
-            TrieNode* fail = cur->fail;
+            Trie* fail = cur->fail;
             while (fail != root && fail->child.find(c) == fail->child.end()) {
                 fail = fail->fail;
             }
             if (fail->child.find(c) != fail->child.end()) {
                 next->fail = fail->child[c];
-            } else {
+            }
+            else {
                 next->fail = root;
             }
             if (next->fail->isEnd) {
@@ -60,10 +62,10 @@ void build_failure(TrieNode* root) {
     }
 }
 
-bool aho_corasick_search(TrieNode* root, const string& text) {
-    TrieNode* cur = root;
+bool aho_corasick_search(const string str) {
+    Trie* cur = root;
 
-    for (char c : text) {
+    for (char c : str) {
         while (cur != root && cur->child.find(c) == cur->child.end()) {
             cur = cur->fail;
         }
@@ -78,24 +80,28 @@ bool aho_corasick_search(TrieNode* root, const string& text) {
 }
 
 int main() {
-    TrieNode* root = new_node();
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    root = new_node();
     int n, m;
     cin >> n;
 
-    string word;
+    string str;
     for (int i = 0; i < n; i++) {
-        cin >> word;
-        insert(root, word);
+        cin >> str;
+        insert(str);
     }
 
-    build_failure(root);
+    build_failure();
 
     cin >> m;
     for (int i = 0; i < m; i++) {
-        cin >> word;
-        if (aho_corasick_search(root, word)) {
+        cin >> str;
+        if (aho_corasick_search(str)) {
             cout << "YES\n";
-        } else {
+        }
+        else {
             cout << "NO\n";
         }
     }
