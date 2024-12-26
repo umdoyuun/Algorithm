@@ -1,60 +1,72 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
-#include <vector>
+#include<iostream>
+#include<vector>
+#include<algorithm>
 using namespace std;
 
-int parent[51];
-int n, m, t;
-int result;
-vector<vector<int>> party;
-vector<int> V;
+int n, m, k, ans;
+int nodes[51];
+vector<int> parties[51];
 
-int getParent(int x) {
-	if (x == parent[x]) return x;
-	else return parent[x] = getParent(parent[x]);
+// 유니온-파인드 함수
+int Find(int a) {
+	if (nodes[a] == a) return a;
+	return nodes[a] = Find(nodes[a]);
 }
 
-
-void unionParent(int x, int y) {
-	int px = getParent(x);
-	int py = getParent(y);
+void Union(int x, int y) {
+	int px = Find(x);
+	int py = Find(y);
 	if (px != py) {
 		if (px < py)
-			parent[py] = parent[px];
+			nodes[py] = nodes[px];
 		else
-			parent[px] = parent[py];
+			nodes[px] = nodes[py];
 	}
+}
+
+// 그룹 번호가 낮은 순서로 정렬하기 위한 커스텀 정렬 함수
+bool compare(int a, int b) {
+	return nodes[a] < nodes[b];
 }
 
 int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-	cout.tie(0);
-	cin >> n >> m >> t;
-	for (int i = 0; i <= n; i++) {
-		parent[i] = i;
+
+	cin >> n >> m;
+	// 1 ~ n번 까지의 사람의 속한 그룹을 자기 자신으로 초기화
+	for (int i = 1; i <= n; ++i) nodes[i] = i;
+
+	// k명의 사람은 진실을 알고있음을 명시, 0번 그룹인 사람들은 진실을 알고 있는 사람들의 그룹으로 가정
+	cin >> k;
+	while (k--) {
+		int a; cin >> a;
+		// a번의 사람의 value를 0으로 바꿔줌으로 진실을 아는 그룹에 속하도록 변경
+		nodes[a] = 0;
 	}
-	int a, p, first;
-	for (int i = 0; i < t; i++) {
-		cin >> a;
-		parent[a] = 0;
-	}
-	for (int i = 0; i < m; i++) {
-		V.clear();
-		cin >> p;
-		cin >> first;
-		V.push_back(first);
-		for (int j = 1; j < p; j++) {
-			cin >> a;
-			V.push_back(a);
-			unionParent(first, a);
+
+	// m개의 파티 정보를 입력 받음
+	for (int i = 0; i < m; ++i) {
+		// i번 파티에 참여한 a명의 참여자를 parties의 i번째 벡터에 추가
+		int a; cin >> a;
+		while (a--) {
+			int b; cin >> b;
+			parties[i].push_back(b);
 		}
-		party.push_back(V);
+
+		// nodes배열의 value가 낮은 순으로 정렬, value가 0인 경우(진실을 아는 경우) 맨 앞으로 오게 됨
+		//sort(parties[i].begin(), parties[i].end(), compare);
+
+		// nodes배열의 value가 가장 낮은 한명을 기준으로 파티에 참여한 인원 모두 그룹화를 진행
+		// 만약 진실을 아는 사람이 있을 경우 해당 파티에 속한 인원은 모두 진실을 알게 된다.
+		for (int j = 1; j < parties[i].size(); ++j) Union(parties[i][0], parties[i][j]);
 	}
-	result = m;
+
+	// m개의 파티 정보를 다시 순회하며 현재 파티에 진실을 아는 사람이 존재하는지 체크
+	int result = m;
 	for (int i = 0; i < m; i++) {
-		for (int j = 0; j < party[i].size(); j++) {
-			if (getParent(party[i][j]) == 0) {
+		for (int j = 0; j < parties[i].size(); j++) {
+			if (Find(parties[i][j]) == 0) {
 				result--;
 				break;
 			}
