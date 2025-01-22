@@ -19,21 +19,16 @@ int main() {
 	cin >> str;
 	for (char c : str) {
 		int x = m[c];
-		if (x == 0) {
-			cnt[x]++;
-		}
-		else {
-			if (cnt[x - 1] > cnt[x]) cnt[x]++;
-			else {
-				res = -1;
-				break;
-			}
-		}
-		if (x == 4 && cnt[4] > 0) {
-			int tmp = cnt[4];
+        if(x == 0) cnt[x]++;
+        else if(cnt[x - 1] > cnt[x]) cnt[x]++;
+        else{
+            res = -1;
+            break;
+        }
+		if (x == 4) {
 			for (int i = 0; i < 5; i++) {
-				res = max(cnt[i], res);
-				cnt[i] -= tmp;
+				res = max(res, cnt[i]);
+				cnt[i]--;
 			}
 		}
 	}
