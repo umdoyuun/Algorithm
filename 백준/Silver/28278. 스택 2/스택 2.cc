@@ -1,38 +1,38 @@
 #include <iostream>
-#include <stack>
 using namespace std;
 
 int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	stack<int> s;
-	int n, cmd, x;
+
+	int s[1000001] = { 0, };
+	int n, cmd, x, e = 0;
 	cin >> n;
 	while (n--) {
 		cin >> cmd;
 		switch (cmd) {
 		case 1: 
 			cin >> x;
-			s.push(x);
+			s[e++] = x;
 			break;
 		case 2:
-			if (!s.empty()) {
-				cout << s.top() << '\n';
-				s.pop();
+			if (e) {
+				cout << s[e - 1] << '\n';
+				e--;
 			}
 			else cout << "-1\n";
 			break;
 		case 3:
-			cout << s.size() << '\n';
+			cout << e << '\n';
 			break;
 		case 4:
-			if (s.empty()) cout << "1\n";
+			if (!e) cout << "1\n";
 			else cout << "0\n";
 			break;
 		case 5:
-			if (!s.empty()) {
-				cout << s.top() << '\n';
+			if (e) {
+				cout << s[e - 1] << '\n';
 			}
 			else cout << "-1\n";
 		}
