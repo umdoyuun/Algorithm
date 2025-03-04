@@ -27,10 +27,10 @@ int main() {
 	}
 	sort(v.begin(), v.end(), cmp);
 	int res = 0;
-	priority_queue<pair<int, int>> pq;
+	priority_queue<int> pq;
 	for (int i = 0; i < n; i++) {
-		pq.push({ -v[i].e, -v[i].s });
-		while (-pq.top().first <= v[i].s) {
+		pq.push( -v[i].e);
+		while (-pq.top() <= v[i].s) {
 			pq.pop();
 		}
 		res = max((int)pq.size(), res);
