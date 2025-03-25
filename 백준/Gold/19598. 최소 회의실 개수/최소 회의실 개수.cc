@@ -18,7 +18,7 @@ int main() {
 	priority_queue<int> pq;
 	int res = 0;
 	for (int i = 0; i < n;i++) {
-		while (!pq.empty() && -pq.top() <= arr[i].first) {
+		while (pq.size() && -pq.top() <= arr[i].first) {
 			pq.pop();
 		}
 
