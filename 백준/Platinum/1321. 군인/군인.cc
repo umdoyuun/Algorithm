@@ -3,6 +3,15 @@ using namespace std;
 
 int n, m;
 int seg[500000 * 4];
+int arr[500001];
+
+int init(int x, int s, int e) {
+	if (s == e) {
+		return seg[x] = arr[s];
+	}
+	int mid = s + (e - s) / 2;
+	return seg[x] = init(x * 2, s, mid) + init(x * 2 + 1, mid + 1, e);
+}
 
 int update(int x, int s, int e, int idx, int value) {
 	if (idx < s || e < idx) return seg[x];
@@ -26,10 +35,9 @@ int main() {
 	cout.tie(0);
 	cin >> n;
 	for (int i = 0; i < n; i++) {
-		int x;
-		cin >> x;
-		update(1, 0, n - 1, i, x);
+		cin >> arr[i];
 	}
+	init(1, 0, n - 1);
 	cin >> m;
 	for (int i = 0; i < m; i++) {
 		int cmd, x, y;
