@@ -13,28 +13,11 @@ int update(int x, int s, int e, int idx, int value) {
 	return seg[x] = update(x * 2, s, mid, idx, value) + update(x * 2 + 1, mid + 1, e, idx, value);
 }
 
-int query(int x, int s, int e, int l, int r) {
-	if (r < s || e < l) return 0;
-	if (l <= s && e <= r) {
-		return seg[x];
-	}
-	int mid = s + (e - s) / 2;
-	return query(x * 2, s, mid, l, r) + query(x * 2 + 1, mid + 1, e, l, r);
-}
-
-int find_soldier(int x, int s, int e) {
+int query(int x, int s, int e, int idx) {
 	if (s == e) return s + 1;
 	int mid = s + (e - s) / 2;
-	int ret = query(1, 0, n - 1, s, mid);
-	if (ret < x) {
-		return find_soldier(x - ret, mid + 1, e);
-	}
-	else if (ret > x) {
-		return find_soldier(x, s, mid);
-	}
-	else {
-		return mid + 1;
-	}
+	if (idx <= seg[x * 2]) return query(x * 2, s, mid, idx);
+	return query(x * 2 + 1, mid + 1, e, idx - seg[x * 2]);
 }
 
 int main() {
@@ -57,7 +40,7 @@ int main() {
 		}
 		else {
 			cin >> x;
-			cout << find_soldier(x, 0, n - 1) << '\n';
+			cout << query(1, 0, n - 1, x) << '\n';
 		}
 	}
 	return 0;
