@@ -39,14 +39,14 @@ int main() {
 	cout.tie(0);
 	cin >> n;
 	init(1, 0, n - 1);
-	for (int i = 0; i < n; i++) {
+	for (register int i = 0; i < n; i++) {
 		int x;
 		cin >> x;
 		int idx = query(1, 0, n - 1, x);
 		arr[idx] = i + 1;
 		update(1, 0, n - 1, idx);
 	}
-	for (int i = 0; i < n;i++) {
+	for (register int i = 0; i < n;i++) {
 		cout << arr[i] << '\n';
 	}
 	return 0;
