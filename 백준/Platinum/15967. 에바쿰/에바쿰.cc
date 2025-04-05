@@ -2,9 +2,9 @@
 using namespace std;
 
 int n, m, k;
-int arr[500001];
-long long seg[500001 * 4];
-long long lazy[500001 * 4];
+int arr[1000001];
+long long seg[1000001 * 4];
+long long lazy[1000001 * 4];
 
 long long init(int x, int s, int e) {
 	if (s == e) {
@@ -14,7 +14,7 @@ long long init(int x, int s, int e) {
 	return seg[x] = init(x * 2, s, mid) + init(x * 2 + 1, mid + 1, e);
 }
 
-void lazy_update(int x, int s, int e) {
+void lazy_update(int x, long long s, long long e) {
 	if (lazy[x]) {
 		seg[x] += (e - s + 1) * lazy[x];
 		if (s != e) {
