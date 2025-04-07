@@ -4,14 +4,14 @@
 using namespace std;
 #define MAX 1005
 
-int n, m, res;
+int n, m, res, t;
 vector<int> v[MAX];
 int d[MAX];
-bool visit[MAX];
+int visit[MAX];
 
 bool dfs(int x) {
-	if (visit[x]) return false;
-	visit[x] = true;
+	if (visit[x] == t) return false;
+	visit[x] = t;
 	for (int y : v[x]) {
 		if (d[y] == -1) {
 			d[y] = x;
@@ -42,9 +42,9 @@ int main() {
 	}
 	memset(d, -1, sizeof(d));
 	for (int i = 0; i < n; i++) {
-		fill(visit, visit + n, false);
+		t++;
 		if (dfs(i)) res++;
-		fill(visit, visit + n, false);
+		t++;
 		if (dfs(i)) res++;
 		if (res == m) break;
 	}
