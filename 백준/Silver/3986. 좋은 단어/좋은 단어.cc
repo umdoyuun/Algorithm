@@ -18,9 +18,8 @@ int main() {
 		init();
 		string str;
 		cin >> str;
-		stack[++t] = str[0];
-		for (int i = 1; i < str.size(); i++) {
-			if (t >= 0 && str[i] == stack[t]) {
+		for (char c : str) {
+			if (t >= 0 && c == stack[t]) {
 				t--;
 				while (t >= 1) {
 					if (stack[t] == stack[t - 1]) {
@@ -32,7 +31,7 @@ int main() {
 				}
 			}
 			else {
-				stack[++t] = str[i];
+				stack[++t] = c;
 			}
 		}
 		if (t == -1) res++;
