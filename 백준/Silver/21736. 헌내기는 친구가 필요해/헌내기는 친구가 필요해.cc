@@ -2,8 +2,8 @@
 using namespace std;
 
 int n, m, sx, sy, res;
-char graph[601][601];
-bool visit[601][601];
+char graph[605][605];
+bool visit[605][605];
 
 int dx[4] = { 1, 0, -1, 0 };
 int dy[4] = { 0, 1, 0, -1 };
@@ -14,7 +14,7 @@ void dfs(int x, int y) {
 	for (int i = 0; i < 4; i++) {
 		int nx = x + dx[i];
 		int ny = y + dy[i];
-		if (nx < 0 || ny < 0 || nx >= n || ny >= m || visit[nx][ny] || graph[nx][ny] == 'X') continue;
+		if (visit[nx][ny]) continue;
 		dfs(nx, ny);
 	}
 }
@@ -24,14 +24,25 @@ int main() {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> n >> m;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
 			cin >> graph[i][j];
 			if (graph[i][j] == 'I') {
 				sx = i;
 				sy = j;
 			}
+			else if (graph[i][j] == 'X') {
+				visit[i][j] = true;
+			}
 		}
+	}
+	for (int i = 0; i <= m; i++) {
+		visit[0][i] = true;
+		visit[n + 1][i] = true;
+	}
+	for (int i = 0; i <= n; i++) {
+		visit[i][0] = true;
+		visit[i][m + 1] = true;
 	}
 	dfs(sx, sy);
 	if (res) {
