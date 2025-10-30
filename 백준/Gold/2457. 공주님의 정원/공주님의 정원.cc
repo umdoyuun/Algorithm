@@ -28,7 +28,7 @@ bool cmp(flower a, flower b) {
 }
 
 int main() {
-	int m = 3, d = 1, n, res = 0;
+	int m = 3, d = 1, n, res = 0, x = 0, y = 0;
 	cin >> n;
 	for (int i = 0; i < n; i++) {
 		int sm, sd, em, ed;
@@ -37,31 +37,27 @@ int main() {
 	}
 	sort(f, f + n, cmp);
 	
-	priority_queue<flower> pq;
 	for (int i = 0; i < n; i++) {
 		if (m > 12) {
 			break;
 		}
 		if (m < f[i].sm || (m == f[i].sm && d < f[i].sd)) {
-			if (!pq.empty()) {
-				//cout << pq.top().sm << ' ' << pq.top().sd << ' ' << pq.top().em << ' ' << pq.top().ed << '\n';
-				m =pq.top().em;
-				d = pq.top().ed;
-				res++;
-			}
-			while (!pq.empty()) {
-				pq.pop();
-			}
+			m = x;
+			d = y;
+			res++;
 		}
 		if (m > f[i].sm || (m == f[i].sm && d >= f[i].sd)) {
-			pq.push(f[i]);
+			if (x < f[i].em || (x == f[i].em && y <= f[i].ed)) {
+				x = f[i].em;
+				y = f[i].ed;
+			}
 		}
 		
 	}
-	if (!pq.empty() && m < 12) {
+	if (m < 12 && m < x) {
 		res++;
-		m = pq.top().em;
-		d = pq.top().ed;
+		m = x;
+		d = y;
 	}
 	if (m < 12) res = 0;
 	cout << res << '\n';
