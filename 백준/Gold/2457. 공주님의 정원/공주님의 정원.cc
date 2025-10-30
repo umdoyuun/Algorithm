@@ -21,16 +21,21 @@ bool cmp(flower a, flower b) {
 }
 
 int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 	int m = 3, d = 1, n, res = 0, x = 0, y = 0;
 	cin >> n;
+	int sz = 0;
 	for (int i = 0; i < n; i++) {
 		int sm, sd, em, ed;
 		cin >> sm >> sd >> em >> ed;
-		f[i] = { sm, sd, em, ed };
+		if (em < 3 || sm > 11) continue;
+		f[sz++] = { sm, sd, em, ed };
 	}
-	sort(f, f + n, cmp);
+	sort(f, f + sz, cmp);
 	
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < sz; i++) {
 		if (m > 12) {
 			break;
 		}
