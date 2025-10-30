@@ -12,20 +12,27 @@ void snow_cleaning() {
 	int flag = 0;
 	int mn = mx;
 	int idx = 0;
+	int tmp_mx = 0;
 	for (int i = 0; i < sz; i++) {
 		if (!sum[i][0]) continue;
+		tmp_mx = max(tmp_mx, sum[i][0]);
 		if (mn > sum[i][0]) {
 			mn = sum[i][0];
-			idx = i;
+			idx = i;			
 		}
 	}
 	for (int i = 0; i < sz; i++) {
 		if (!sum[i][1]) continue;
+		tmp_mx = max(tmp_mx, sum[i][1]);
 		if (mn > sum[i][1]) {
 			flag = 1;
 			mn = sum[i][1];
-			idx = i;
+			idx = i;			
 		}
+	}
+	if (tmp_mx < res) {
+		total = 0;
+		return;
 	}
 	total -= mn;
 	res = max(res, mn);
