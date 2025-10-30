@@ -1,16 +1,9 @@
 #include <iostream>
 #include <algorithm>
-#include <queue>
 using namespace std;
 
 struct flower {
 	int sm, sd, em, ed;
-	bool operator<(const flower& other) const {
-		if (em == other.em) {
-			return ed < other.ed;
-		}
-		return em < other.em;
-	}
 };
 flower f[100001];
 
