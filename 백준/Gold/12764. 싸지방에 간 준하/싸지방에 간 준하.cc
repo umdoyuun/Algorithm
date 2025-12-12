@@ -2,7 +2,6 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
-#include <set>
 using namespace std;
 
 int n, cnt;
@@ -30,12 +29,12 @@ int main() {
 		arr.push_back({ x, y });
 	}
 	sort(arr.begin(), arr.end());
-	set<int> pc_use;
 	priority_queue<pc> pq;
+	priority_queue<int> pc_use;
 	for (auto cur : arr) {
 		while (!pq.empty()) {
 			if (pq.top().et < cur.first) {
-				pc_use.insert(pq.top().num);
+				pc_use.push(-pq.top().num);
 				pq.pop();
 			}
 			else {
@@ -48,9 +47,9 @@ int main() {
 			res.push_back(1);
 		}
 		else {
-			pn = *pc_use.begin();			
+			pn = -pc_use.top();			
 			res[pn]++;
-			pc_use.erase(pn);
+			pc_use.pop();
 		}
 		pq.push({ cur.second, pn });
 	}
