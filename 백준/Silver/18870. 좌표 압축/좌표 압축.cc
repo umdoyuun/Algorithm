@@ -1,9 +1,9 @@
 #include <iostream>
-#include <map>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int arr[1000001];
-map<int, int> m;
+vector<int> v, v2;
 
 int main() {
 	ios::sync_with_stdio(0);
@@ -11,16 +11,18 @@ int main() {
 	cout.tie(0);
 	int n;
 	cin >> n;
+	v.reserve(n);
+	v2.reserve(n);
 	for (int i = 0; i < n; i++) {
-		cin >> arr[i];
-		m[arr[i]] = 0;
+		int x;
+		cin >> x;
+		v.push_back(x);
+		v2.push_back(x);
 	}
-	int cnt = 0;
-	for (auto it = m.begin(); it != m.end(); it++) {
-		it->second = cnt++;
-	}
-	for (int i = 0; i < n; i++) {
-		cout << m[arr[i]] << ' ';
+	sort(v.begin(), v.end());
+	v.erase(unique(v.begin(), v.end()), v.end());
+	for (auto x : v2) {
+		cout << lower_bound(v.begin(), v.end(), x) - v.begin() << ' ';
 	}
 	return 0;
 }
