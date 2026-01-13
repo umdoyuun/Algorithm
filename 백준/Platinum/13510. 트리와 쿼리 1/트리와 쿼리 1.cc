@@ -70,7 +70,7 @@ int path_query(int x, int y) {
 		x = node[node[x].top].par;
 	}
 	if (node[x].depth > node[y].depth) swap(x, y);
-	if (node[x].pos + 1 <= node[y].pos) {
+	if (node[x].pos < node[y].pos) {
 		ret = max(ret, query(1, 0, n - 1, node[x].pos + 1, node[y].pos));
 	}
 	return ret;
