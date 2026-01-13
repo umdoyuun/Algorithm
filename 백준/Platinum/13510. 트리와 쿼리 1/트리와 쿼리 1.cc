@@ -6,8 +6,8 @@ using namespace std;
 const int MAX = 100001;
 
 int n, m, cnt;
-vector<pair<int, int>> edges[MAX];
-pair<int, int> edge_info[MAX];
+vector<pair<int, int>> v[MAX];
+pair<int, int> edges[MAX];
 int cost[MAX];
 
 class Node {
@@ -21,14 +21,14 @@ int dfs(int x, int pre) {
 	node[x].par = pre;
 	node[x].heavy = -1;
 	int sum = 1, mx = -1;
-	for (auto next : edges[x]) {
-		if (pre == next.first) continue;
-		cost[next.first] = next.second;
-		int sz = dfs(next.first, x);
+	for (auto [y, c] : v[x]) {
+		if (y == pre) continue;
+		cost[y] = c;
+		int sz = dfs(y, x);
 		sum += sz;
-		if (mx < sz) {
-			node[x].heavy = next.first;
+		if (sz > mx) {
 			mx = sz;
+			node[x].heavy = y;
 		}
 	}
 	return sum;
@@ -38,13 +38,14 @@ void hld(int x, int top, int d) {
 	node[x].pos = cnt++;
 	node[x].top = top;
 	node[x].depth = d;
+
 	if (node[x].heavy != -1) {
 		hld(node[x].heavy, top, d + 1);
 	}
 
-	for (auto next : edges[x]) {
-		if (next.first == node[x].par || next.first == node[x].heavy) continue;
-		hld(next.first, next.first, d + 1);
+	for (auto [y, c] : v[x]) {
+		if (y == node[x].par || y == node[x].heavy) continue;
+		hld(y, y, d + 1);
 	}
 }
 
@@ -77,8 +78,8 @@ int path_query(int x, int y) {
 }
 
 int get_node(int idx) {
-	int x = edge_info[idx].first;
-	int y = edge_info[idx].second;
+	int x = edges[idx].first;
+	int y = edges[idx].second;
 	return node[x].depth > node[y].depth ? x : y;
 }
 
@@ -90,9 +91,9 @@ int main() {
 	int x, y, c;
 	for (int i = 1; i < n; i++) {
 		cin >> x >> y >> c;
-		edges[x].push_back({ y, c });
-		edges[y].push_back({ x, c });
-		edge_info[i] = { x, y };
+		v[x].push_back({ y, c });
+		v[y].push_back({ x, c });
+		edges[i] = { x, y };
 	}
 
 	dfs(1, 0);
