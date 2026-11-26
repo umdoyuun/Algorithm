@@ -1,6 +1,5 @@
 #include <iostream>
 #include <list>
-#include <vector>
 using namespace std;
 
 int n;
@@ -11,7 +10,6 @@ int main() {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> n;
-	vector<int> res(n, 0);
 	for (int i = 0; i < n; i++) {
 		int x;
 		cin >> x;
@@ -20,7 +18,7 @@ int main() {
 	auto it = li.begin();
 	int cnt = 0;
 	while (true) {
-		res[cnt++] = it->second + 1;
+		cout << it->second + 1 << ' ';
 		int mv = it->first;
 		it = li.erase(it);
 		if (li.empty()) break;
@@ -38,9 +36,6 @@ int main() {
 				--it;
 			}
 		}
-	}
-	for (auto x : res) {
-		cout << x << ' ';
 	}
 	return 0;
 }
